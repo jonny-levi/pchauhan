@@ -1,15 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "laravel.fullname" . }}
-  labels:
-    {{- include "laravel.labels" . | nindent 4 }}
+  name: { { .Values.service.name } }
+  namespace: { { .Values.application.image } }
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
-    {{- include "laravel.selectorLabels" . | nindent 4 }}
+    app: { { .Values.application.name } }
+  type: { { .Values.service.type } }
+  sessionAffinity: None
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - name: { { .Service.Name } }
+      protocol: TCP
+      port: { { .Service.Port } }
+      targetPort:
+      # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+      # you can specify a value in the `spec.ports[*].nodePort` field.
