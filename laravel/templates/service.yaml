@@ -12,9 +12,9 @@ spec:
     clientIP:
       timeoutSeconds: 10800
   ports:
-    - name: { { .Service.Name } }
+    - name: { { .Values.service.name.service.Name } }
       protocol: TCP
-      port: { { .Service.Port } }
+      port: { { .Values.service.port } }
       targetPort:
       # If you set the `spec.type` field to `NodePort` and you want a specific port number,
       # you can specify a value in the `spec.ports[*].nodePort` field.
