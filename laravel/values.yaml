@@ -1,5 +1,6 @@
 application:
   name: pchauhan-demo-project
+  deployment: pchauhan-demo-project-deployment
   image: nginx
   namespace: demo-project-namespace
   port:

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.application.name | quote }}-deployment
-  namespace: {{ .Values.application.namespace }}
+  name: { { .Values.application.deployment | quote } }
+  namespace: { { .Values.application.namespace } }
   labels:
-    app: {{ .Values.application.name | quote}}
+    app: { { .Values.application.name | quote } }
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.application.name | quote}}
-  replicas: {{ .Values.application.replicas }}
+      app: { { .Values.application.name | quote } }
+  replicas: { { .Values.application.replicas } }
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,11 +18,10 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Values.application.name | quote}}
+        app: { { .Values.application.name | quote } }
     spec:
       containers:
-        - name: {{ .Values.application.name | quote }}
-          image: {{ .Values.application.image }}
+        - name: { { .Values.application.name | quote } }
+          image: { { .Values.application.image } }
           ports:
-            - containerPort: {{ .Values.application.containerPort }}
-
+            - containerPort: { { .Values.application.port.containerPort } }
