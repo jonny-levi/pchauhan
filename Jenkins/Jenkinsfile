@@ -4,9 +4,7 @@ pipeline {
         GIT_REPO = ''
         DOCKER_REGISTRY = ''
         DOCKER_REGISTRY_TAG = ''
-        DOCKER_REGISTRY = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
-        DOCKER_REGISTRY_TAG = 'v1.0.0'
-        NAMESPACE = 'my-namespace'
+        NAMESPACE = ''
     }
 
     // Define pipeline stages
@@ -47,6 +45,7 @@ pipeline {
                         sudo apt-get update
                         sudo apt-get install helm
                         kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
+                        
                         helm install -f laravel/values.yaml pchauhan-project ./laravel
                         '''
                     }
