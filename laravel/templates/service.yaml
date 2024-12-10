@@ -12,7 +12,7 @@ spec:
     clientIP:
       timeoutSeconds: 10800
   ports:
-    - name: {{ .Values.service.name.service.Name }}
+    - name: {{ .Values.service.name}}
       protocol: TCP
       port: {{ .Values.service.port }}
       targetPort:
