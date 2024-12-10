@@ -3,7 +3,7 @@ pipeline {
     environment {
         GIT_REPO = ''
         DOCKER_REGISTRY = ''
-        DOCKER_REGISTRY_TAG = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
+        DOCKER_REGISTRY_TAG = ''
         NAMESPACE = 'my-namespace'
     }
 
