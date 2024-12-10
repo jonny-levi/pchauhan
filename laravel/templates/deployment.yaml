@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: { { .Values.application.deployment | quote } }
+  name: { { .Values.application.deployment } }
   namespace: { { .Values.application.namespace } }
   labels:
-    app: { { .Values.application.name | quote } }
+    app: { { .Values.application.name } }
 spec:
   selector:
     matchLabels:
-      app: { { .Values.application.name | quote } }
+      app: { { .Values.application.name } }
   replicas: { { .Values.application.replicas } }
   strategy:
     rollingUpdate:
@@ -18,10 +18,10 @@ spec:
   template:
     metadata:
       labels:
-        app: { { .Values.application.name | quote } }
+        app: { { .Values.application.name } }
     spec:
       containers:
-        - name: { { .Values.application.name | quote } }
+        - name: { { .Values.application.name } }
           image: { { .Values.application.image } }
           ports:
             - containerPort: { { .Values.application.port.containerPort } }
