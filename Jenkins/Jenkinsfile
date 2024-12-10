@@ -2,8 +2,8 @@ pipeline {
     // Define global environment variables
     environment {
         GIT_REPO = ''
-        DOCKER_REGISTRY = ''
-        DOCKER_REGISTRY_TAG = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
+        DOCKER_REGISTRY = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
+        DOCKER_REGISTRY_TAG = 'v1.0.0'
         NAMESPACE = 'my-namespace'
     }
 
@@ -22,8 +22,30 @@ pipeline {
                         git branch: 'main', credentialsId: '', url: GIT_REPO
                         sh '''
                         /kaniko/executor --dockerfile `pwd`/Dockerfile --context `pwd` \
-                        --destination=${DOCKER_REGISTRY_TAG}:v1.0.0 \
+                        --destination=${DOCKER_REGISTRY}:${DOCKER_REGISTRY_TAG} \
                         --insecure --skip-tls-verify
+                        '''
+                    }
+                }
+            }
+        }
+
+                // Stage to deploy the image to Kubernetes using another agent
+        stage('Deploy to Kubernetes') {
+            agent {
+                label 'kubernetes-deployer'  // Specify another Jenkins agent with a specific label
+            }
+            steps {
+                script {
+                    withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
+                        sh '''
+                        curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+                        sudo apt-get install apt-transport-https --yes
+                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+                        sudo apt-get update
+                        sudo apt-get install helm
+                        kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
+                        helm install -f laravel/values.yaml pchauhan-project ./laravel
                         '''
                     }
                 }
@@ -43,23 +65,6 @@ pipeline {
                 pip install -r requirements.txt
                 pytest
                 '''
-            }
-        }
-
-        // Stage to deploy the image to Kubernetes using another agent
-        stage('Deploy to Kubernetes') {
-            agent {
-                label 'kubernetes-deployer'  // Specify another Jenkins agent with a specific label
-            }
-            steps {
-                script {
-                    withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
-                        sh '''
-                        kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
-                        kubectl apply -f k8s/deployment.yaml -n ${NAMESPACE}
-                        '''
-                    }
-                }
             }
         }
     }
