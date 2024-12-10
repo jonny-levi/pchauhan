@@ -1,10 +1,10 @@
 pipeline {
     // Define global environment variables
     environment {
-        GIT_REPO = ''
+        GIT_REPO = 'https://github.com/jonny-levi/pchauhan.git'
         DOCKER_REGISTRY = ''
-        DOCKER_REGISTRY_TAG = ''
-        NAMESPACE = ''
+        DOCKER_REGISTRY_TAG = 'v1.0.0'
+        NAMESPACE = 'demo-project-namespace'
     }
 
     // Define pipeline stages
@@ -21,7 +21,7 @@ pipeline {
                     script {
                         git branch: 'main', credentialsId: '', url: GIT_REPO
                         sh '''
-                        /kaniko/executor --dockerfile `pwd`/Dockerfile --context `pwd` \
+                        /kaniko/executor --dockerfile `pwd`/Jenkins/Dockerfile --context `pwd` \
                         --destination=${DOCKER_REGISTRY}:${DOCKER_REGISTRY_TAG} \
                         --insecure --skip-tls-verify
                         '''
