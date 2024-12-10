@@ -2,6 +2,8 @@ pipeline {
     // Define global environment variables
     environment {
         GIT_REPO = ''
+        DOCKER_REGISTRY = ''
+        DOCKER_REGISTRY_TAG = ''
         DOCKER_REGISTRY = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
         DOCKER_REGISTRY_TAG = 'v1.0.0'
         NAMESPACE = 'my-namespace'
