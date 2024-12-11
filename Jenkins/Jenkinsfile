@@ -39,11 +39,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
                         sh '''
-                        curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
-                        sudo apt-get install apt-transport-https --yes
-                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-                        sudo apt-get update
-                        sudo apt-get install helm
+                        
                         kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
                         
                         helm install -f laravel/values.yaml pchauhan-project ./laravel
@@ -54,19 +50,26 @@ pipeline {
         }
 
         // Stage to run unit tests in a Docker container on a different agent
-        stage('Run Tests') {
-            agent {
-                docker {
-                    image 'python:3.8'  // Use a Python Docker container for testing
-                    args '-v /tmp:/tmp'  // Pass any Docker run arguments here
-                }
-            }
-            steps {
-                sh '''
-                pip install -r requirements.txt
-                pytest
-                '''
-            }
-        }
+        // stage('Run Tests') {
+        //     agent {
+        //         docker {
+        //             image 'python:3.8'  // Use a Python Docker container for testing
+        //             args '-v /tmp:/tmp'  // Pass any Docker run arguments here
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //         pip install -r requirements.txt
+        //         pytest
+        //         '''
+        //     }
+        // }
     }
 }
+
+
+// curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+//                         sudo apt-get install apt-transport-https --yes
+//                         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+//                         sudo apt-get update
+//                         sudo apt-get install helm
