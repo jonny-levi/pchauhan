@@ -2,7 +2,7 @@
 resource "aws_eks_cluster" "this" {
   name     = "${var.project}-cluster"
   role_arn = aws_iam_role.cluster.arn
-  version  = "1.31"
+  version  = "1.27"
 
   vpc_config {
     # security_group_ids      = [aws_security_group.eks_cluster.id, aws_security_group.eks_nodes.id]
@@ -20,6 +20,7 @@ resource "aws_eks_cluster" "this" {
     aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy
   ]
 }
+
 
 # EKS Cluster IAM Role
 resource "aws_iam_role" "cluster" {

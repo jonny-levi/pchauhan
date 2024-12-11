@@ -11,7 +11,7 @@ variable "subnet_cidr_bits" {
 }
 variable "project" {
   type    = string
-  default = "demo-project"
+  default = "pchauhan-pro-demo"
 }
 
 variable "availability_zones_count" {
@@ -31,8 +31,6 @@ variable "iam-username" {
   description = "The username to use for ECR and EKS"
   default     = "ro-user-ecr-eks"
 }
-
-
 
 variable "tags" {
   description = "A map of tags to add to all resources"

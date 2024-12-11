@@ -2,7 +2,7 @@ pipeline {
     // Define global environment variables
     environment {
         GIT_REPO = 'https://github.com/jonny-levi/pchauhan.git'
-        DOCKER_REGISTRY = ''
+        DOCKER_REGISTRY = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
         DOCKER_REGISTRY_TAG = 'v1.0.0'
         NAMESPACE = 'demo-project-namespace'
     }
