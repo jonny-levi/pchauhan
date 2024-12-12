@@ -20,13 +20,10 @@
 #   role       = aws_iam_role.k8s-cluster.name
 # }
 
-<<<<<<< HEAD
-# Optionally, enable Security Groups for Pods
-# Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
-=======
+
 # # Optionally, enable Security Groups for Pods
 # # Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
->>>>>>> 2b82c52 (need to fix nodes iam permissions)
+
 # resource "aws_iam_role_policy_attachment" "example-AmazonEKSVPCResourceController" {
 #   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
 #   role       = aws_iam_role.k8s-cluster.name
