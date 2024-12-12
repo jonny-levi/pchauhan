@@ -40,9 +40,8 @@ pipeline {
 
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Deploy to Kubernetes') {
-            agent {
-                kubernetes  // Specify another Jenkins agent with a specific label
-            }
+            agent kubernetes  // Specify another Jenkins agent with a specific label
+            
             steps {
                 script {
                     withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
@@ -58,9 +57,8 @@ pipeline {
         }
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Delete resources') {
-            agent {
-                kubernetes  // Specify another Jenkins agent with a specific label
-            }
+            agent kubernetes  // Specify another Jenkins agent with a specific label
+            
             steps {
                 script {
                     withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
