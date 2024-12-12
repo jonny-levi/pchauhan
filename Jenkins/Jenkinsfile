@@ -10,8 +10,8 @@ pipeline {
         DOCKER_REGISTRY_TAG = 'v1.0.0'
         NAMESPACE = 'demo-project-namespace'
         AWS_REGION = 'us-east-1'
-        AWS_ACCESS_KEY_ID = credentials('AKIAZTHXXYEGEZUUMUYA')
-        AWS_SECRET_ACCESS_KEY = credentials('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')
+        AWS_ACCESS_KEY_ID = 'AKIAZTHXXYEGEZUUMUYA'
+        AWS_SECRET_ACCESS_KEY = '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'
     }
 
     // Define pipeline stages
