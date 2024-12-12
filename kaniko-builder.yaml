@@ -5,10 +5,10 @@ spec:
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
     command:
-    - sleep
+      - sleep
     args:
-    - 9999999
-  env:
+      - 9999999
+    env:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
@@ -21,12 +21,11 @@ spec:
             key: AWS_SECRET_ACCESS_KEY
       - name: AWS_DEFAULT_REGION
         value: "us-east-1"
-    # Optionally mount the AWS credentials as a secret if using a file
-  #   volumeMounts:
-  #     - name: aws-credentials
-  #       mountPath: /root/.aws
-  #       readOnly: true
-  # volumes:
-  #   - name: aws-credentials
-  #     secret:
-  #       secretName: aws-credentials
+    volumeMounts:
+      - name: aws-credentials
+        mountPath: /root/.aws
+        readOnly: true
+  volumes:
+    - name: aws-credentials
+      secret:
+        secretName: aws-credentials
