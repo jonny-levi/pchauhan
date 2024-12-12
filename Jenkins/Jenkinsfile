@@ -36,40 +36,27 @@ pipeline {
                 }
             }
         }
-
         // Stage to deploy the image to Kubernetes using another agent
         stage('Deploy to Kubernetes') {
-            agent {
-                kubernetes {
-                    yamlFile 'deployer.yaml'  // Define the Kaniko builder pod
-                }
-            }
+            agent any
             steps {
-                container(name: 'deployer-pod', shell: '/bin/bash') {
-                    script {
-                        sh '''
-                        kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
-                        helm install -f laravel/values.yaml pchauhan-project ./laravel
-                        '''
-                    }
+                script {
+                    sh '''
+                    kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
+                    helm install -f laravel/values.yaml pchauhan-project ./laravel
+                    '''
                 }
             }
         }
         // Stage to deploy the image to Kubernetes using another agent
         stage('Delete resources') {
-            agent {
-                kubernetes {
-                    yamlFile 'deployer.yaml'  // Define the Kaniko builder pod
-                }
-            }
+            agent any
             steps {
-                container(name: 'deployer-pod', shell: '/bin/bash') {
-                    script {
-                        sh '''
-                        kubectl delete namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
-                        helm uninstall pchauhan-project
-                        '''
-                    }
+                script {
+                    sh '''
+                    kubectl delete namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
+                    helm uninstall pchauhan-project
+                    '''
                 }
             }
         }
