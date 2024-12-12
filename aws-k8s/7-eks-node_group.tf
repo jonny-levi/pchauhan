@@ -77,6 +77,13 @@ resource "aws_security_group" "eks_nodes" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 0        # Allow all inbound ports
+    to_port     = 0        # Allow all inbound ports
+    protocol    = "-1"     # Allow all protocols
+    cidr_blocks = ["0.0.0.0/0"]  # Allow traffic from anywhere (or specify a range if more secure)
+  }
+
   tags = {
     Name                                           = "${var.project}-node-sg"
     "kubernetes.io/cluster/${var.project}-cluster" = "owned"
