@@ -28,9 +28,7 @@ pipeline {
                     script {
                         git branch: 'main', credentialsId: 'git-creds', url: GIT_REPO
                         sh '''
-                        echo \$AWS_ACCESS_KEY_ID > /root/.aws/credentials
-                        echo \$AWS_SECRET_ACCESS_KEY >> /root/.aws/credentials
-                        export AWS_REGION=${AWS_REGION}
+
                         /kaniko/executor --dockerfile `pwd`/Jenkins/Dockerfile --context `pwd` \
                         --destination=${DOCKER_REGISTRY}:${DOCKER_REGISTRY_TAG} \
                         --insecure --skip-tls-verify
