@@ -9,6 +9,9 @@ pipeline {
         DOCKER_REGISTRY = '659797033228.dkr.ecr.us-east-1.amazonaws.com/demo-project-ecr-repo'
         DOCKER_REGISTRY_TAG = 'v1.0.0'
         NAMESPACE = 'demo-project-namespace'
+        AWS_REGION = 'us-east-1'
+        AWS_ACCESS_KEY_ID = credentials('AKIAZTHXXYEGEZUUMUYA')
+        AWS_SECRET_ACCESS_KEY = credentials('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')
     }
 
     // Define pipeline stages
@@ -25,6 +28,9 @@ pipeline {
                     script {
                         git branch: 'main', credentialsId: 'git-creds', url: GIT_REPO
                         sh '''
+                        echo \$AWS_ACCESS_KEY_ID > /root/.aws/credentials
+                        echo \$AWS_SECRET_ACCESS_KEY >> /root/.aws/credentials
+                        export AWS_REGION=${AWS_REGION}
                         /kaniko/executor --dockerfile `pwd`/Jenkins/Dockerfile --context `pwd` \
                         --destination=${DOCKER_REGISTRY}:${DOCKER_REGISTRY_TAG} \
                         --insecure --skip-tls-verify
