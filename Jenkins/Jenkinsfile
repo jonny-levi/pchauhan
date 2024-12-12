@@ -40,35 +40,95 @@ pipeline {
 
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Deploy to Kubernetes') {
-            agent kubernetes  // Specify another Jenkins agent with a specific label
-            
+            agent {
+                kubernetes {
+                    yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins/agent: kubernetes-deployer
+spec:
+  containers:
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    command:
+    - cat
+    tty: true
+  - name: helm
+    image: alpine/helm:3.8.0
+    command:
+    - cat
+    tty: true
+  volumes:
+  - name: kubeconfig
+    projected:
+      sources:
+      - secret:
+          name: kubeconfig-secret
+  volumeMounts:
+  - name: kubeconfig
+    mountPath: /root/.kube
+"""
+                }
+            }
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
+
                         sh '''
                         
                         kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
                         
                         helm install -f laravel/values.yaml pchauhan-project ./laravel
                         '''
-                    }
+                    
                 }
             }
         }
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Delete resources') {
-            agent kubernetes  // Specify another Jenkins agent with a specific label
-            
+agent {
+                kubernetes {
+                    yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins/agent: kubernetes-deployer
+spec:
+  containers:
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    command:
+    - cat
+    tty: true
+  - name: helm
+    image: alpine/helm:3.8.0
+    command:
+    - cat
+    tty: true
+  volumes:
+  - name: kubeconfig
+    projected:
+      sources:
+      - secret:
+          name: kubeconfig-secret
+  volumeMounts:
+  - name: kubeconfig
+    mountPath: /root/.kube
+"""
+                }
+            }
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
+
                         sh '''
                         
                         kubectl delete namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
                         
                         helm uninstall pchauhan-project
                         '''
-                    }
+                    
                 }
             }
         }
