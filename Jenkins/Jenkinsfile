@@ -42,7 +42,6 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
-                        git branch: 'main', credentialsId: 'git-creds', url: GIT_REPO
                         sh '''
                         
                         kubectl create namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
@@ -61,7 +60,6 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'kubeconfig-credential-id']) {
-                        git branch: 'main', credentialsId: 'git-creds', url: GIT_REPO
                         sh '''
                         
                         kubectl delete namespace ${NAMESPACE} || echo "Namespace ${NAMESPACE} already exists"
