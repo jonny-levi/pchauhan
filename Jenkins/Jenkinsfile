@@ -41,7 +41,7 @@ pipeline {
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Deploy to Kubernetes') {
             agent {
-                label 'kubernetes-deployer'  // Specify another Jenkins agent with a specific label
+                kubernetes  // Specify another Jenkins agent with a specific label
             }
             steps {
                 script {
@@ -59,7 +59,7 @@ pipeline {
                 // Stage to deploy the image to Kubernetes using another agent
         stage('Delete resources') {
             agent {
-                label 'kubernetes-deployer'  // Specify another Jenkins agent with a specific label
+                kubernetes  // Specify another Jenkins agent with a specific label
             }
             steps {
                 script {
