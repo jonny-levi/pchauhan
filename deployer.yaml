@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: deployer-pod
+  namespace: jenkins
+  labels:
+    app: deployer
+spec:
+  containers:
+  - name: tools
+    image: ubuntu:20.04
+    command:
+    - sleep
+    args:
+    - "999999"
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /root/.kube
+    env:
+    - name: DEBIAN_FRONTEND
+      value: "noninteractive"
+    lifecycle:
+      postStart:
+        exec:
+          command:
+          - /bin/sh
+          - -c
+          - |
+            apt-get update && \
+            apt-get install -y curl apt-transport-https gnupg && \
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+            chmod +x kubectl && mv kubectl /usr/local/bin/ && \
+            curl https://baltocdn.com/helm/signing.asc | apt-key add - && \
+            apt-get install -y software-properties-common && \
+            apt-add-repository "deb https://baltocdn.com/helm/stable/debian/ all main" && \
+            apt-get update && apt-get install -y helm
+  volumes:
+  - name: kubeconfig
+    projected:
+      sources:
+      - secret:
+          name: kubeconfig-secret
