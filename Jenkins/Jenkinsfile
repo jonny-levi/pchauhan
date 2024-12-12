@@ -1,4 +1,8 @@
 pipeline {
+    agent none
+    options {
+        skipDefaultCheckout() // This prevents the automatic git clone
+    }
     // Define global environment variables
     environment {
         GIT_REPO = 'https://github.com/jonny-levi/pchauhan.git'
