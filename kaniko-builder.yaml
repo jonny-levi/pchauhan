@@ -8,15 +8,25 @@ spec:
     - sleep
     args:
     - 9999999
+  env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_ACCESS_KEY_ID
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_SECRET_ACCESS_KEY
+      - name: AWS_DEFAULT_REGION
+        value: "us-east-1"
+    # Optionally mount the AWS credentials as a secret if using a file
   #   volumeMounts:
-  #     - name: jenkins-docker-cfg
-  #       mountPath: /kaniko/.docker
+  #     - name: aws-credentials
+  #       mountPath: /root/.aws
+  #       readOnly: true
   # volumes:
-  # - name: jenkins-docker-cfg
-  #   projected:
-  #     sources:
-  #     - secret:
-  #         name: docker-credentials
-  #         items:
-  #           - key: .dockerconfigjson
-  #             path: config.json
+  #   - name: aws-credentials
+  #     secret:
+  #       secretName: aws-credentials
