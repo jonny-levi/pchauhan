@@ -1,28 +1,29 @@
-
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    effect = "Allow"
-    principals {
-      type        = "Service"
-      identifiers = ["eks.amazonaws.com"]
-    }
-    actions = ["sts:AssumeRole"]
+variable "region_number" {
+  # Arbitrary mapping of region name to number to use in
+  # a VPC's CIDR prefix.
+  default = {
+    us-east-1      = 1
+    us-west-1      = 2
+    us-west-2      = 3
+    eu-central-1   = 4
+    ap-northeast-1 = 5
+    us-east-1      = 6
   }
 }
 
-resource "aws_iam_role" "k8s-cluster" {
-  name               = "k8s-cluster"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+variable "az_number" {
+  # Assign a number to each AZ letter used in our configuration
+  default = {
+    a = 1
+    b = 2
+
+  }
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.k8s-cluster.name
+# Retrieve the AZ where we want to create network resources
+# This must be in the region selected on the AWS provider.
+data "aws_availability_zone" "us-east-zone" {
+  name = "us-east-1a"
 }
 
-# Optionally, enable Security Groups for Pods
-# Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
-resource "aws_iam_role_policy_attachment" "example-AmazonEKSVPCResourceController" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.k8s-cluster.name
-}
+
