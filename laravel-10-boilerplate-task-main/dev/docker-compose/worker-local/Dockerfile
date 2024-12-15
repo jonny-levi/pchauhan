@@ -1,4 +1,4 @@
-FROM php:8.2-alpine3.16
+FROM php:8.2
 
 ARG queueTimeout
 ARG queueTries
@@ -28,6 +28,14 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 WORKDIR /var/www
+
+COPY . .
+
+# Install the Laravel dependencies
+RUN composer install --no-autoloader --no-scripts
+
+# # Generate the autoloader
+# RUN composer dump-autoload --optimize
 
 # test: php artisan queue:work redis --queue=default --once
 CMD php artisan queue:work redis --queue=${QUEUES} --timeout=${QUEUE_TIMEOUT} --tries={$QUEUE_TRIES}
