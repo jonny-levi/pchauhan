@@ -1,7 +1,7 @@
 application:
   name: pchauhan-demo-project
   deployment: pchauhan-demo-project-deployment
-  image: nginx
+  image: <aws ecr repository URI:tag>
   namespace: demo-project-namespace
   port:
     containerPort: 80

@@ -24,7 +24,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 #RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 WORKDIR /var/www
 
@@ -35,6 +35,13 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Install the Laravel dependencies
 
 RUN composer install --no-dev --optimize-autoloader
+# --no-dev --optimize-autoloader
+
+RUN composer dump-autoload --optimize
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # test: php artisan queue:work redis --queue=default --once
 CMD php artisan queue:work redis --queue=${QUEUES} --timeout=${QUEUE_TIMEOUT} --tries=${QUEUE_TRIES} 
+
+# Generate Laravel application key
+RUN php artisan key:generate

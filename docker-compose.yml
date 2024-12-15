@@ -24,6 +24,8 @@ services:
       - host.docker.internal:host-gateway
     networks:
       - ap
+    depends_on:
+      - worker-local
 
   nginx:
     image: nginx:alpine
