@@ -27,3 +27,5 @@ yarn-error.log
 
 # terraform
 /aws-k8s/.terraform
+
+vendor
