@@ -39,9 +39,8 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN composer dump-autoload --optimize
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod 777 storage/ -R
+
 
 # test: php artisan queue:work redis --queue=default --once
 CMD php artisan queue:work redis --queue=${QUEUES} --timeout=${QUEUE_TIMEOUT} --tries=${QUEUE_TRIES} 
-
-# Generate Laravel application key
-RUN php artisan key:generate
