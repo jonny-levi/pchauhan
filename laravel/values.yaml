@@ -1,13 +1,51 @@
-application:
-  name: pchauhan-demo-project
-  deployment: pchauhan-demo-project-deployment
-  image: <aws ecr repository URI:tag>
-  namespace: demo-project-namespace
-  port:
-    containerPort: 80
-  replicas: 1
+app:
+  image: ap-laravel
+  port: 5173
+  workingDir: /var/www
+  volumes:
+    - ./:/var/www
+    - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
+  extraHosts:
+    - host.docker.internal:host-gateway
 
-service:
-  name: demo-project-service
-  type: LoadBalancer
+nginx:
+  image: nginx:alpine
   port: 80
+  volumes:
+    - ./:/var/www
+    - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
+
+worker:
+  image: ap-worker-local
+  workingDir: /var/www
+  volumes:
+    - ./:/var/www
+    - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
+  extraHosts:
+    - host.docker.internal:host-gateway
+  args:
+    queueTimeout: 30
+    queueTries: 2
+    queues: default,indexing,notifications
+
+mysql:
+  image: mysql
+  port: 3306
+  environment:
+    MYSQL_DATABASE: {{ .Values.mysql.database }}
+    MYSQL_ROOT_PASSWORD: {{ .Values.mysql.rootPassword }}
+    MYSQL_PASSWORD: {{ .Values.mysql.password }}
+    MYSQL_USER: {{ .Values.mysql.user }}
+  volumes:
+    - ./dev/docker-compose/mysql:/docker-entrypoint-initdb.d
+
+redis:
+  image: redis
+  port: 6379
+  volumes:
+    - ./dev/docker-compose/redis/redis.conf:/usr/local/etc/redis/redis.conf
+  healthcheck:
+    test: [ "CMD", "redis-cli", "ping" ]
+
+network:
+  name: ap
