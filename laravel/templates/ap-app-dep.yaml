@@ -19,16 +19,15 @@ spec:
         ports:
         - containerPort: {{ .Values.app.port.containerPort }}
         volumeMounts:
-        - mountPath: {{ .Values.app.volumeMountPath }}
-          name: {{.Values.persistence.pv-app-name }}
-        - mountPath: /usr/local/etc/php/conf.d/app.ini
-          # subPath: app.ini
+        - mountPath: {{ .Values.app.volumeMounts.mountPath1 }}
+          name: {{.Values.app.volumes.pv-app-name }}
+        - mountPath: {{ .Values.app.volumeMounts.mountPath2 }}
           name: config-volume
       volumes:
-      - name: {{.Values.persistence.pv-app-name }}
+      - name: {{.Values.app.volumes.pv-app-name }}
         persistentVolumeClaim:
-          claimName: {{.Values.persistence.pvc-app-name }}
-      - name: config-volume
+          claimName: {{.Values.app.volumes.pvc-app-name }}
+      - name: {{.Values.configMap.app.name }}
         configMap:
-          name: app-config
+          name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"
 

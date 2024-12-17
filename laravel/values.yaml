@@ -1,9 +1,5 @@
 namespace: pchauhan
 
-persistence:
-  pv-app-name: app-pv
-  pvc-app-name: app-pvc
-
 
 configMap:
   app:
@@ -12,20 +8,40 @@ configMap:
     name: ap-redis-cm
 
 app:
+################
+## Deployment ##
+################
   deployment: ap-app-deployment
   name: ap-app
+  image: ap-laravel
+  port: 
+    containerPort: 5173
+  replicas: 1
+
+  volumeMountPath: 
+  volumes:
+    pv-app-name: app-pv
+    pvc-app-name: app-pvc
+    size: 5Gi
+  volumeMounts:
+    mountPath1:   
+      path: /var/www
+      name: pv-app-name
+    mountPath2: 
+      path: /usr/local/etc/php/conf.d/app.ini
+      name: pvc-app-name
+    
+
+
+################
+### Service ####
+################
   service:
     name: ap-app-service
     port: 80
     targetPort: 80
     type: ClusterIP
-  image: ap-laravel
-  port: 
-    containerPort: 5173
-  volumeMountPath: /usr/local/etc/php/conf.d/app.ini
-  volumes:
-    # - ./:/var/www
-  replicas: 1
+
 
 nginx:
   deployment: ap-nginx-deployment

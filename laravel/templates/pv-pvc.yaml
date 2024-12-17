@@ -1,26 +1,26 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: "{{persistence.}}-{{}}"
+  name: "{{ .Release.Name }}-{{.Values.app.volumes.pv-app-name }}"
   namespace: "{{ .Values.namespace }}-{{ .Values.namespace }}"
 spec:
   capacity:
-    storage: 5Gi
+    storage: {{.Values.app.volumes.size }}
   accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "{{ .Values.volumes.hostPath }}/app"
+    - {{.Values.app.volumes.accessModes }}
+  # hostPath:
+  #   path: "{{ .Values.volumes.hostPath }}/app"
 
 ---
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: app-pvc
+  name: "{{ .Release.Name }}-{{.Values.app.volumes.pv-app-name }}"
   namespace: "{{ .Values.namespace }}-{{ .Values.namespace }}"
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{.Values.app.volumes.accessModes }}
   resources:
     requests:
-      storage: 5Gi
+      storage: {{.Values.app.volumes.size }}
