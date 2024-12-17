@@ -14,7 +14,11 @@ configMap:
 app:
   deployment: ap-app-deployment
   name: ap-app
-  serviceName: ap-app-service
+  service:
+    name: ap-app-service
+    port: 80
+    targetPort: 80
+    type: ClusterIP
   image: ap-laravel
   port: 
     containerPort: 5173
@@ -24,8 +28,14 @@ app:
   replicas: 1
 
 nginx:
+  deployment: ap-nginx-deployment
   image: nginx:alpine
-  port: 80
+  name: ap-nginx
+  service:
+    name: ap-nginx-service
+    port: 80
+    targetPort: 80
+    type: LoadBalancer
   volumes:
     # - ./:/var/www
     # - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
