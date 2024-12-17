@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-{{ .Values.app.containerName }}
+  name: {{ .Values.app.deployment }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.app.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-app
+      app: {{ .Values.app.name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-app
+        app: {{ .Values.app.name }}
     spec:
       containers:
-      - name: {{ .Values.app.containerName }}
+      - name: {{ .Values.app.name }}
         image: {{ .Values.app.image }}
         ports:
-        - containerPort: {{ .Values.app.ports[0].targetPort }}
+        - containerPort: {{ .Values.app.port.containerPort }}
         volumeMounts:
         - mountPath: {{ .Values.app.volumeMountPath }}
-          name: app-volume
+          name: {{.Values.persistence.pv-app-name }}
         - mountPath: /usr/local/etc/php/conf.d/app.ini
-          subPath: app.ini
+          # subPath: app.ini
           name: config-volume
       volumes:
-      - name: app-volume
+      - name: {{.Values.persistence.pv-app-name }}
         persistentVolumeClaim:
-          claimName: app-pvc
+          claimName: {{.Values.persistence.pvc-app-name }}
       - name: config-volume
         configMap:
           name: app-config

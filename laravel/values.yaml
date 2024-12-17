@@ -1,51 +1,64 @@
 namespace: pchauhan
 
+persistence:
+  pv-app-name: app-pv
+  pvc-app-name: app-pvc
+
+
+configMap:
+  app:
+    name: ap-app-cm
+  redis:
+    name: ap-redis-cm
+
 app:
+  deployment: ap-app-deployment
+  name: ap-app
+  serviceName: ap-app-service
   image: ap-laravel
-  port: 5173
-  workingDir: /var/www
+  port: 
+    containerPort: 5173
+  volumeMountPath: /usr/local/etc/php/conf.d/app.ini
   volumes:
-    - ./:/var/www
-    - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
-  extraHosts:
-    - host.docker.internal:host-gateway
+    # - ./:/var/www
+  replicas: 1
 
 nginx:
   image: nginx:alpine
   port: 80
   volumes:
-    - ./:/var/www
-    - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
+    # - ./:/var/www
+    # - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
 
 worker:
   image: ap-worker-local
   workingDir: /var/www
   volumes:
-    - ./:/var/www
-    - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
-  extraHosts:
-    - host.docker.internal:host-gateway
+    # - ./:/var/www
+    # - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
   args:
     queueTimeout: 30
     queueTries: 2
     queues: default,indexing,notifications
 
 mysql:
+  service:
+    name: mysql-service
+    port: 3306
   image: mysql
-  port: 3306
   environment:
     MYSQL_DATABASE: {{ .Values.mysql.database }}
     MYSQL_ROOT_PASSWORD: {{ .Values.mysql.rootPassword }}
     MYSQL_PASSWORD: {{ .Values.mysql.password }}
     MYSQL_USER: {{ .Values.mysql.user }}
   volumes:
-    - ./dev/docker-compose/mysql:/docker-entrypoint-initdb.d
+    # - ./dev/docker-compose/mysql:/docker-entrypoint-initdb.d
 
 redis:
   image: redis
   port: 6379
   volumes:
-    - ./dev/docker-compose/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    # - ./dev/docker-compose/redis/redis.conf:/usr/local/etc/redis/redis.conf
   healthcheck:
     test: [ "CMD", "redis-cli", "ping" ]
 
