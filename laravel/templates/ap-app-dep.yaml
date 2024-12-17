@@ -1,27 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.application.deployment }}
-  namespace: {{ .Values.application.namespace }}
-  labels:
-    app: {{ .Values.application.name }}
+  name: {{ .Release.Name }}-{{ .Values.app.containerName }}
+  namespace: {{ .Values.namespace }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.application.name }}
-  replicas: {{ .Values.application.replicas }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      app: {{ .Release.Name }}-app
   template:
     metadata:
       labels:
-        app: {{ .Values.application.name }}
+        app: {{ .Release.Name }}-app
     spec:
       containers:
-        - name: {{ .Values.application.name }}
-          image: {{ .Values.application.image }}
-          ports:
-            - containerPort: {{ .Values.application.port.containerPort }}
+      - name: {{ .Values.app.containerName }}
+        image: {{ .Values.app.image }}
+        ports:
+        - containerPort: {{ .Values.app.ports[0].targetPort }}
+        volumeMounts:
+        - mountPath: {{ .Values.app.volumeMountPath }}
+          name: app-volume
+        - mountPath: /usr/local/etc/php/conf.d/app.ini
+          subPath: app.ini
+          name: config-volume
+      volumes:
+      - name: app-volume
+        persistentVolumeClaim:
+          claimName: app-pvc
+      - name: config-volume
+        configMap:
+          name: app-config
+

@@ -1,3 +1,5 @@
+namespace: pchauhan
+
 app:
   image: ap-laravel
   port: 5173
