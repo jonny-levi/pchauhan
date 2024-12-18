@@ -5,7 +5,7 @@ persistence:
     pvcName: web-directory-pvc
     size: 5Gi
     accessModes: ReadWriteMany
-    storageClass: 
+    storageClass: vsphere-sc
 
 
 # imagePullSecrets:
