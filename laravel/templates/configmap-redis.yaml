@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "{{ .Release.Name }}-{{.Values.configMap.redis.name}}"
-  namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
+  namespace: {{ .Release.Name }}
 data:
   redis.conf: |
     # Redis configuration file example.

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "{{ .Release.Name }}-{{.Values.configMap.mysql.name}}"
-  namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
+  namespace: {{ .Release.Name }}
 data:
   init_db.sql: |
     
