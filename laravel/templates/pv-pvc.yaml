@@ -1,4 +1,16 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "{{ .Release.Name }}-{{.Values.persistence.webDirectory.pvName }}"
+  namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
+spec:
+  capacity:
+    storage: {{.Values.persistence.webDirectory.size }}
+  accessModes:
+    - {{.Values.persistence.webDirectory.accessModes }}
+
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: "{{ .Release.Name }}-{{.Values.persistence.webDirectory.pvcName }}"
