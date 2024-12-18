@@ -109,9 +109,14 @@ mysql:
     name: mysql-service
     port: 3306
     type: ClusterIP
-  mountPath1:   
+  volumeMounts:
+    mountPath1:   
       path: /var/lib/mysql
       name: mysql-directory-pv
+  volumes:
+    pvMysqlName: mysql-pv
+    pvcMysqlName: mysql-pvc
+    
   
 redis:
   deployment: redis-deployment
