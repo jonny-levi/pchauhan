@@ -26,7 +26,7 @@ configMap:
 app:
   deployment: ap-app-deployment
   name: laravel-ap-app
-  image: 172.20.20.245:5000/app-laravel
+  image: 172.20.20.245:5000/app-laravel:v1.0.0
   port: 
     containerPort: 5173
   replicas: 1
