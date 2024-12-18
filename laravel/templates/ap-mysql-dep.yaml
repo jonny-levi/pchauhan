@@ -24,7 +24,7 @@ spec:
         - name: {{ .Values.mysql.name }}
           image: {{ .Values.mysql.image }}
           command: ["mysqld"]
-          args: ["--sql_mode=STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"]
+          args: ["--sql_mode="]
           ports:
             - containerPort: {{ .Values.mysql.service.port }}
           env:

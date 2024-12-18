@@ -99,7 +99,7 @@ mysql:
   deployment: larvel-mysql-deployment
   name: laravel-mysql
   replicas: 1
-  image: 172.20.20.245:5000/laravel-mysql:v1.0.0
+  image: mysql
   service:
     name: mysql-service
     port: 3306
