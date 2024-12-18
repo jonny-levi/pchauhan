@@ -48,7 +48,7 @@ app:
 nginx:
   deployment: ap-nginx-deployment
   image: nginx:alpine
-  name: ap-nginx
+  name: laravel-ap-nginx
   service:
     name: ap-nginx-service
     port: 80
@@ -68,15 +68,30 @@ nginx:
     # - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
 
 worker:
-  image: ap-worker-local
+  deployment: ap-worker-deployment
+  name: laravel-ap-worker
+  image: 172.20.20.245:5000/ap-worker-local:v1.0.0
+  replicas: 1
   workingDir: /var/www
+  volumeMounts:
+    mountPath1:   
+      path: /var/www
+      name: web-directory
+    mountPath2: 
+      path: /usr/local/etc/php/conf.d/app.ini
+      name: app-ini-cm
   volumes:
+    pv-worker-name: worker-pv
+    pvc-worker-name: worker-pvc
     # - ./:/var/www
     # - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
   args:
     queueTimeout: 30
     queueTries: 2
     queues: default,indexing,notifications
+  service:
+    name: laravel-ap-worker
+    port:
 
 mysql:
   deployment: ap-larvel-deployment
@@ -97,10 +112,11 @@ redis:
     name: laravel-redis-svc
     port: 6379
     type: ClusterIP
-  volumes:
-    # - ./dev/docker-compose/redis/redis.conf:/usr/local/etc/redis/redis.conf
+  volumeMounts:
+    mountPath1:   
+      path: /usr/local/etc/redis/redis.conf
+
   healthcheck:
     test: [ "CMD", "redis-cli", "ping" ]
 
-network:
-  name: ap
+

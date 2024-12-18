@@ -26,7 +26,7 @@ spec:
       volumes:
       - name: {{.Values.app.volumes.pv-app-name }}
         persistentVolumeClaim:
-          claimName: {{.Values.app.volumes.pvc-app-name }}
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.web-directory.pvs-name }}"
       - name: {{.Values.configMap.app.name }}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"

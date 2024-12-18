@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.application.deployment }}
+  name: {{ .Values.worker.deployment }}
   namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
   labels:
-    app: {{ .Values.application.name }}
+    app: {{ .Values.worker.name }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.application.name }}
-  replicas: {{ .Values.application.replicas }}
+      app: {{ .Values.worker.name }}
+  replicas: {{ .Values.worker.replicas }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,10 +18,22 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Values.application.name }}
+        app: {{ .Values.worker.name }}
     spec:
       containers:
-        - name: {{ .Values.application.name }}
-          image: {{ .Values.application.image }}
+        - name: {{ .Values.worker.name }}
+          image: {{ .Values.worker.image }}
           ports:
-            - containerPort: {{ .Values.application.port.containerPort }}
+            - containerPort: {{ .Values.worker.service.port }}
+          volumeMounts:
+          - mountPath: {{ .Values.worker.volumeMounts.mountPath1.path }}
+            name: {{.Values.worker.volumeMounts.mountPath1.name }}
+          - mountPath: {{ .Values.worker.volumeMounts.mountPath2.path }}
+            name: {{.Values.worker.volumeMounts.mountPath2.name }}
+      volumes:
+      - name: {{.Values.worker.volumeMounts.mountPath1.name}}
+        persistentVolumeClaim:
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.web-directory.pvs-name }}"
+      - name: {{.Values.worker.volumeMounts.mountPath2.name }}
+        configMap:
+          name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"

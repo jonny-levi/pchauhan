@@ -24,4 +24,11 @@ spec:
         - name: {{ .Values.redis.name }}
           image: {{ .Values.redis.image }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.redis.service.port }}
+          volumeMounts:
+          - mountPath: {{ .Values.redis.volumeMounts.mountPath1.path }}
+            name: {{.Values.configMap.redis.name}}
+      volumes:
+      - name: {{.Values.configMap.redis.name}}
+        configMap:
+          name: "{{ .Release.Name }}-{{.Values.configMap.redis.name}}"
