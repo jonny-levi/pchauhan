@@ -31,22 +31,22 @@ spec:
           - name: MYSQL_DATABASE
             valueFrom:
               configMapKeyRef:
-                name: {{.Values.configMap.env.name}}
+                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
                 key: DB_DATABASE
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: {{.Values.configMap.env.name}}
+                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
                 key: DB_PASSWORD
           - name: MYSQL_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: {{.Values.configMap.env.name}}
+                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
                 key: DB_PASSWORD
           - name: MYSQL_USER
             valueFrom:
               configMapKeyRef:
-                name: {{.Values.configMap.env.name}}
+                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
                 key: DB_USERNAME
           volumeMounts:
           - name: mysql-init-scripts

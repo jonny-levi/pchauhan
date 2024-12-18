@@ -8,6 +8,9 @@ persistence:
     storageClass: 
 
 
+# imagePullSecrets:
+#   name: regcred
+
 configMap:
   app:
     name: ap-app-cm
@@ -93,7 +96,7 @@ worker:
     type: ClusterIP
 
 mysql:
-  deployment: ap-larvel-deployment
+  deployment: larvel-mysql-deployment
   name: laravel-mysql
   replicas: 1
   image: 172.20.20.245:5000/laravel-mysql:v1.0.0
