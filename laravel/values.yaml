@@ -63,8 +63,8 @@ nginx:
       path: /etc/nginx/conf.d/
       name: pvc-nginx-name
   volumes:
-    pv-nginx-name: nginx-pv
-    pvc-nginx-name: nginx-pvc
+    pvNginxName: nginx-pv
+    pvcNginxName: nginx-pvc
 
 
 worker:
