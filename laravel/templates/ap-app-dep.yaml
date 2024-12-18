@@ -19,10 +19,10 @@ spec:
         ports:
         - containerPort: {{ .Values.app.port.containerPort }}
         volumeMounts:
-        - mountPath: {{ .Values.app.volumeMounts.mountPath1 }}
+        - mountPath: {{ .Values.app.volumeMounts.mountPath1.path }}
           name: {{.Values.app.volumes.pv-app-name }}
-        - mountPath: {{ .Values.app.volumeMounts.mountPath2 }}
-          name: config-volume
+        - mountPath: {{ .Values.app.volumeMounts.mountPath2.path }}
+          name: {{.Values.configMap.app.name}}
       volumes:
       - name: {{.Values.app.volumes.pv-app-name }}
         persistentVolumeClaim:

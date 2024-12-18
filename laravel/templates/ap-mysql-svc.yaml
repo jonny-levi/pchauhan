@@ -5,9 +5,9 @@ metadata:
   namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
 spec:
   selector:
-    app: {{ .Release.Name }}
+    app: {{ .Values.mysql.name }}
   ports:
     - protocol: TCP
       port: {{ .Values.mysql.service.port }}
       targetPort: {{ .Values.mysql.service.port }}
-  type: ClusterIP
+  type: {{ .Values.mysql.service.type }}

@@ -24,4 +24,16 @@ spec:
         - name: {{ .Values.nginx.name }}
           image: {{ .Values.nginx.image }}
           ports:
-            - containerPort: {{ .Values.nginx.port.containerPort }}
+            - containerPort: {{ .Values.nginx.service.port }}
+          volumeMounts:
+          - mountPath: {{ .Values.nginx.volumeMounts.mountPath1.path }}
+            name: {{.Values.nginx.volumes.pv-nginx-name }}
+          - mountPath: {{ .Values.nginx.volumeMounts.mountPath2.path }}
+            name: {{.Values.configMap.nginx.name}}
+      volumes:
+      - name: {{.Values.nginx.volumes.pv-nginx-name }}
+        persistentVolumeClaim:
+          claimName: {{.Values.persistence.web-directory.pvc-name }}
+      - name: {{.Values.configMap.nginx.name}}
+        configMap:
+          name: "{{ .Release.Name }}-{{.Values.configMap.nginx.name}}"

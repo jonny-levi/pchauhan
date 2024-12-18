@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.app.service.name }}
   namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
 spec:
-  type: ClusterIP
+  type: {{ .Values.app.service.type }}
   ports:
     - name: {{ .Values.app.service.name }}
       port: {{ .Values.app.port.containerPort }}

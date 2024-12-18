@@ -1,28 +1,36 @@
 namespace: pchauhan
 
+persistence:
+  web-directory:
+    pv-name: web-directory-pv
+    pvc-name: web-directory-pvc
+    size: 5Gi
+    accessModes: ReadWriteMany
+
 
 configMap:
   app:
     name: ap-app-cm
   redis:
     name: ap-redis-cm
+  env:
+    name: ap-env-cm
+  mysql:
+    name: ap-mysql-cm
+  nginx:
+    name: ap-nginx-cm
 
 app:
-################
-## Deployment ##
-################
   deployment: ap-app-deployment
   name: ap-app
-  image: ap-laravel
+  image: 172.20.20.245:5000/app-laravel
   port: 
     containerPort: 5173
   replicas: 1
-
   volumeMountPath: 
   volumes:
     pv-app-name: app-pv
     pvc-app-name: app-pvc
-    size: 5Gi
   volumeMounts:
     mountPath1:   
       path: /var/www
@@ -30,16 +38,10 @@ app:
     mountPath2: 
       path: /usr/local/etc/php/conf.d/app.ini
       name: pvc-app-name
-    
-
-
-################
-### Service ####
-################
   service:
     name: ap-app-service
-    port: 80
-    targetPort: 80
+    port: 5173
+    targetPort: 5173
     type: ClusterIP
 
 
@@ -52,7 +54,16 @@ nginx:
     port: 80
     targetPort: 80
     type: LoadBalancer
+  volumeMounts:
+    mountPath1:   
+      path: /var/www
+      name: pv-nginx-name
+    mountPath2: 
+      path: /etc/nginx/conf.d/
+      name: pvc-nginx-name
   volumes:
+    pv-nginx-name: nginx-pv
+    pvc-nginx-name: nginx-pvc
     # - ./:/var/www
     # - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
 
@@ -68,21 +79,24 @@ worker:
     queues: default,indexing,notifications
 
 mysql:
+  deployment: ap-larvel-deployment
+  name: laravel-mysql
+  replicas: 1
+  image: 172.20.20.245:5000/laravel-mysql:v1.0.0
   service:
     name: mysql-service
     port: 3306
-  image: mysql
-  environment:
-    MYSQL_DATABASE: {{ .Values.mysql.database }}
-    MYSQL_ROOT_PASSWORD: {{ .Values.mysql.rootPassword }}
-    MYSQL_PASSWORD: {{ .Values.mysql.password }}
-    MYSQL_USER: {{ .Values.mysql.user }}
-  volumes:
-    # - ./dev/docker-compose/mysql:/docker-entrypoint-initdb.d
-
+    type: ClusterIP
+  
 redis:
-  image: redis
-  port: 6379
+  deployment: redis-deployment
+  name: laravel-redis
+  image: 172.20.20.245:5000/pchauhan-redis:v1.0.0
+  replicas: 1
+  service:
+    name: laravel-redis-svc
+    port: 6379
+    type: ClusterIP
   volumes:
     # - ./dev/docker-compose/redis/redis.conf:/usr/local/etc/redis/redis.conf
   healthcheck:
