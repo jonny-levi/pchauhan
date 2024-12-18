@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: {{.Values.worker.volumeMounts.mountPath1.name}}
         persistentVolumeClaim:
-          claimName: "{{ .Release.Name }}-{{.Values.persistence.web-directory.pvc-name }}"
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.webDirectory.pvcName }}"
       - name: {{.Values.worker.volumeMounts.mountPath2.name }}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"

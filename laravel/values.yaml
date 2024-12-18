@@ -1,9 +1,9 @@
 namespace: pchauhan
 
 persistence:
-  web-directory:
-    pv-name: web-directory-pv
-    pvc-name: web-directory-pvc
+  webDirectory:
+    pvName: web-directory-pv
+    pvcName: web-directory-pvc
     size: 5Gi
     accessModes: ReadWriteMany
     storageClass: 
@@ -30,8 +30,8 @@ app:
   replicas: 1
   volumeMountPath: 
   volumes:
-    pv-app-name: app-pv
-    pvc-app-name: app-pvc
+    pvAppName: app-pv
+    pvcAppName: app-pvc
   volumeMounts:
     mountPath1:   
       path: /var/www
@@ -81,8 +81,8 @@ worker:
       path: /usr/local/etc/php/conf.d/app.ini
       name: app-ini-cm
   volumes:
-    pv-worker-name: worker-pv
-    pvc-worker-name: worker-pvc
+    pvWorkerName: worker-pv
+    pvcWorkerName: worker-pvc
   args:
     queueTimeout: 30
     queueTries: 2

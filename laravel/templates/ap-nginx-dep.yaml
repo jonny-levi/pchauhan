@@ -27,13 +27,13 @@ spec:
             - containerPort: {{ .Values.nginx.service.port }}
           volumeMounts:
           - mountPath: {{ .Values.nginx.volumeMounts.mountPath1.path }}
-            name: {{.Values.nginx.volumes.pv-nginx-name }}
+            name: {{.Values.nginx.volumes.pvNginxName }}
           - mountPath: {{ .Values.nginx.volumeMounts.mountPath2.path }}
             name: {{.Values.configMap.nginx.name}}
       volumes:
-      - name: {{.Values.nginx.volumes.pv-nginx-name }}
+      - name: {{.Values.nginx.volumes.pvNginxName }}
         persistentVolumeClaim:
-          claimName: {{.Values.persistence.web-directory.pvc-name }}
+          claimName: {{.Values.persistence.webDirectory.pvcName }}
       - name: {{.Values.configMap.nginx.name}}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.nginx.name}}"
