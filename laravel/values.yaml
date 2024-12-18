@@ -6,6 +6,7 @@ persistence:
     pvc-name: web-directory-pvc
     size: 5Gi
     accessModes: ReadWriteMany
+    storageClass: 
 
 
 configMap:
@@ -22,7 +23,7 @@ configMap:
 
 app:
   deployment: ap-app-deployment
-  name: ap-app
+  name: laravel-ap-app
   image: 172.20.20.245:5000/app-laravel
   port: 
     containerPort: 5173
@@ -34,10 +35,10 @@ app:
   volumeMounts:
     mountPath1:   
       path: /var/www
-      name: pv-app-name
+      name: web-directory-pv
     mountPath2: 
       path: /usr/local/etc/php/conf.d/app.ini
-      name: pvc-app-name
+      name: app-ini-cm
   service:
     name: ap-app-service
     port: 5173
@@ -64,8 +65,7 @@ nginx:
   volumes:
     pv-nginx-name: nginx-pv
     pvc-nginx-name: nginx-pvc
-    # - ./:/var/www
-    # - ./dev/docker-compose/nginx:/etc/nginx/conf.d/
+
 
 worker:
   deployment: ap-worker-deployment
@@ -76,22 +76,22 @@ worker:
   volumeMounts:
     mountPath1:   
       path: /var/www
-      name: web-directory
+      name: web-directory-pv
     mountPath2: 
       path: /usr/local/etc/php/conf.d/app.ini
       name: app-ini-cm
   volumes:
     pv-worker-name: worker-pv
     pvc-worker-name: worker-pvc
-    # - ./:/var/www
-    # - ./dev/docker-compose/php/app.ini:/usr/local/etc/php/conf.d/app.ini
   args:
     queueTimeout: 30
     queueTries: 2
     queues: default,indexing,notifications
   service:
     name: laravel-ap-worker
-    port:
+    port: 9000
+    targetPort: 9000
+    type: ClusterIP
 
 mysql:
   deployment: ap-larvel-deployment

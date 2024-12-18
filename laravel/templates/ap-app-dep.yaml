@@ -20,14 +20,14 @@ spec:
         - containerPort: {{ .Values.app.port.containerPort }}
         volumeMounts:
         - mountPath: {{ .Values.app.volumeMounts.mountPath1.path }}
-          name: {{.Values.app.volumes.pv-app-name }}
+          name: {{.Values.app.volumeMounts.mountPath1.name }}
         - mountPath: {{ .Values.app.volumeMounts.mountPath2.path }}
-          name: {{.Values.configMap.app.name}}
+          name: {{.Values.app.volumeMounts.mountPath2.name}}
       volumes:
-      - name: {{.Values.app.volumes.pv-app-name }}
+      - name: {{.Values.app.volumeMounts.mountPath1.name}}
         persistentVolumeClaim:
-          claimName: "{{ .Release.Name }}-{{.Values.persistence.web-directory.pvs-name }}"
-      - name: {{.Values.configMap.app.name }}
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.web-directory.pvc-name }}"
+      - name: {{.Values.app.volumeMounts.mountPath2.name }}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"
 
