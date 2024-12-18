@@ -4,7 +4,8 @@ metadata:
   name: "{{ .Release.Name }}-{{.Values.persistence.webDirectory.pvcName }}"
   namespace: "{{ .Release.Name }}-{{ .Values.namespace }}"
 spec:
-  accessModes: {{.Values.persistence.webDirectory.accessModes }}
+  accessModes: 
+  - {{.Values.persistence.webDirectory.accessModes }}
   resources:
     requests:
       storage: {{.Values.persistence.webDirectory.size }}
