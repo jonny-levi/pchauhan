@@ -6,6 +6,11 @@ persistence:
     size: 5Gi
     accessModes: ReadWriteMany
     storageClass: nfs-client
+  mysql:
+    pvcName: mysql-directory-pvc
+    size: 1Gi
+    accessModes: ReadWriteMany
+    storageClass: nfs-client
 
 
 # imagePullSecrets:
@@ -104,6 +109,9 @@ mysql:
     name: mysql-service
     port: 3306
     type: ClusterIP
+  mountPath1:   
+      path: /var/lib/mysql
+      name: mysql-directory-pv
   
 redis:
   deployment: redis-deployment

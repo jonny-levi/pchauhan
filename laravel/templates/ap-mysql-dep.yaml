@@ -51,7 +51,12 @@ spec:
           volumeMounts:
           - name: mysql-init-scripts
             mountPath: /docker-entrypoint-initdb.d
+          - mountPath: {{ .Values.mysql.volumeMounts.mountPath1.path }}
+            name: {{.Values.mysql.volumeMounts.mountPath1.name }}
       volumes:
       - name: mysql-init-scripts
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.mysql.name}}"
+      - name: {{.Values.mysql.volumeMounts.mountPath1.name}}
+        persistentVolumeClaim:
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.mysql.pvcName }}"
