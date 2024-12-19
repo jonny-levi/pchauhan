@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: {{.Values.nginx.volumes.pvNginxName }}
         persistentVolumeClaim:
-          claimName: {{.Values.persistence.webDirectory.pvcName }}
+          claimName: "{{ .Release.Name }}-{{.Values.persistence.webDirectory.pvcName }}"
       - name: {{.Values.configMap.nginx.name}}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.nginx.name}}"

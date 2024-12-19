@@ -23,8 +23,8 @@ spec:
       containers:
         - name: {{ .Values.mysql.name }}
           image: {{ .Values.mysql.image }}
-          command: ["mysqld"]
-          args: ["--sql_mode="]
+          # command: ["mysqld"]
+          # args: ["--sql_mode="]
           ports:
             - containerPort: {{ .Values.mysql.service.port }}
           env:
