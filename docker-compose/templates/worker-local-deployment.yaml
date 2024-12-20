@@ -23,7 +23,7 @@ spec:
         io.kompose.service: worker-local
     spec:
       containers:
-        - image: ap-worker-local
+        - image: 172.20.20.245:5000/ap-worker-local:v1.0.0
           name: ap-worker-local
           volumeMounts:
             - mountPath: /var/www

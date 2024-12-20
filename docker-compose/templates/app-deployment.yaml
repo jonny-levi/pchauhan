@@ -23,7 +23,7 @@ spec:
         io.kompose.service: app
     spec:
       containers:
-        - image: ap-laravel
+        - image: 172.20.20.245:5000/app-laravel:v1.0.0
           name: ap-app
           ports:
             - containerPort: 5173
