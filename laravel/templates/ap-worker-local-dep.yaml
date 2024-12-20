@@ -28,8 +28,7 @@ spec:
           - -c
           - |
             composer install --no-dev --optimize-autoloader
-            composer dump-autoload --optimize
-            chmod 777 /var/www/storage/ -R
+
           ports:
             - containerPort: {{ .Values.worker.service.port }}
           volumeMounts:
@@ -44,3 +43,7 @@ spec:
       - name: {{.Values.worker.volumeMounts.mountPath2.name }}
         configMap:
           name: "{{ .Release.Name }}-{{.Values.configMap.app.name}}"
+
+
+            # composer dump-autoload --optimize
+            # chmod 777 /var/www/storage/ -R
