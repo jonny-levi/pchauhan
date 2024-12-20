@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Name }}
 spec:
   selector:
-    app: {{ .Values.worker.name }}
+    prod: {{ .Values.worker.name }}
   ports:
     - protocol: TCP
       port: {{ .Values.worker.service.port }}

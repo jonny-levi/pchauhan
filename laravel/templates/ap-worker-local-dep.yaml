@@ -4,11 +4,11 @@ metadata:
   name: {{ .Values.worker.deployment }}
   namespace: {{ .Release.Name }}
   labels:
-    app: {{ .Values.worker.name }}
+    prod: {{ .Values.worker.name }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.worker.name }}
+      prod: {{ .Values.worker.name }}
   replicas: {{ .Values.worker.replicas }}
   strategy:
     rollingUpdate:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Values.worker.name }}
+        prod: {{ .Values.worker.name }}
     spec:
       containers:
         - name: {{ .Values.worker.name }}
