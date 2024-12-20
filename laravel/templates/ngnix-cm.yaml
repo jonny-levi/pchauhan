@@ -6,7 +6,7 @@ metadata:
 data:
   app.conf: |
     upstream app {
-        server {{.Values.worker.service.name}};  # Replace with your actual service name and port
+        server 10.97.100.4:9000; 
     }
     server {
         #listen 443 ssl;
