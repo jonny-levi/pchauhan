@@ -23,6 +23,11 @@ spec:
       containers:
         - name: {{ .Values.worker.name }}
           image: {{ .Values.worker.image }}
+          command:
+          - sh
+          - -c
+          - |
+            composer install --no-dev --optimize-autoloader
           ports:
             - containerPort: {{ .Values.worker.service.port }}
           volumeMounts:
