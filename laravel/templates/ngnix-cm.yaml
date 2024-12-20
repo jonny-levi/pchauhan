@@ -6,7 +6,7 @@ metadata:
 data:
   app.conf: |
     upstream app {
-        server 10.97.100.4:9000; 
+        server {{.Values.worker.service.name}}.{{ .Release.Name }}.svc.cluster.local:9000; 
     }
     server {
         #listen 443 ssl;
