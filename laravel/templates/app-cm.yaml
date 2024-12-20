@@ -25,3 +25,16 @@ data:
     opcache.validate_timestamps=0
     opcache.save_comments=1
     opcache.fast_shutdown=1
+  supervisord-app.conf: | 
+    [supervisord]
+    nodaemon=true
+
+    [program:php-fpm]
+    command=php-fpm -F
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+    autorestart=true
+    startretries=0
+
