@@ -28,7 +28,7 @@ spec:
           - -c
           - |
             cd {{ .Values.worker.volumeMounts.mountPath1.path }}
-            composer install --no-dev --optimize-autoloader
+            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
             composer dump-autoload --optimize
             chmod 777 /var/www/storage/ -R
           ports:
