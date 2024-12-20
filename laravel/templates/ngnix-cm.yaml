@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Release.Name }}
 data:
   app.conf: |
+    upstream app {
+        server {{.Values.worker.service.name}}:9000;  # Replace with your actual service name and port
+    }
     server {
         #listen 443 ssl;
         listen 80;
