@@ -23,17 +23,17 @@ spec:
           name: {{.Values.app.volumeMounts.mountPath1.name }}
         - mountPath: {{ .Values.app.volumeMounts.mountPath2.path }}
           name: {{.Values.app.volumeMounts.mountPath2.name}}
-        initContainers:
-        - name: git-clone
-          image: alpine/git
-          command:
-          - sh
-          - -c
-          - |
-            git clone https://github.com/jonny-levi/pchauhan.git /var/www
-          volumeMounts:
-          - name: app-files
-            mountPath: {{.Values.app.volumeMounts.mountPath1.path}}
+      initContainers:
+      - name: git-clone
+        image: alpine/git
+        command:
+        - sh
+        - -c
+        - |
+          git clone https://github.com/jonny-levi/pchauhan.git {{ .Values.app.volumeMounts.mountPath1.path }}
+        volumeMounts:
+        - name: app-files
+          mountPath: {{.Values.app.volumeMounts.mountPath1.path}}
       volumes:
       - name: {{.Values.app.volumeMounts.mountPath1.name}}
         persistentVolumeClaim:
