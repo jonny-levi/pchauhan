@@ -28,6 +28,8 @@ spec:
           - -c
           - |
             composer install --no-dev --optimize-autoloader
+            composer dump-autoload --optimize
+            chmod 777 /var/www/storage/ -R
           ports:
             - containerPort: {{ .Values.worker.service.port }}
           volumeMounts:
