@@ -30,7 +30,7 @@ spec:
           - sh
           - -c
           - |
-            https://github.com/jonny-levi/pchauhan.git /var/www
+            git clone https://github.com/jonny-levi/pchauhan.git /var/www
           volumeMounts:
           - name: app-files
             mountPath: {{.Values.app.volumeMounts.mountPath1.path}}
