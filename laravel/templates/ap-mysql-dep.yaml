@@ -38,16 +38,16 @@ spec:
               configMapKeyRef:
                 name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
                 key: DB_PASSWORD
-          - name: MYSQL_PASSWORD
-            valueFrom:
-              configMapKeyRef:
-                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
-                key: DB_PASSWORD
-          - name: MYSQL_USER
-            valueFrom:
-              configMapKeyRef:
-                name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
-                key: DB_USERNAME
+          # - name: MYSQL_PASSWORD
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
+          #       key: DB_PASSWORD
+          # - name: MYSQL_USER
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: "{{ .Release.Name }}-{{.Values.configMap.env.name}}"
+          #       key: DB_USERNAME
           volumeMounts:
           - name: mysql-init-scripts
             mountPath: /docker-entrypoint-initdb.d
