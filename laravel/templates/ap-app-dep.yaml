@@ -32,7 +32,7 @@ spec:
         - |
           git clone https://github.com/jonny-levi/pchauhan.git {{ .Values.app.volumeMounts.mountPath1.path }}
         volumeMounts:
-        - name: app-files
+        - name: {{.Values.app.volumeMounts.mountPath1.name}}
           mountPath: {{.Values.app.volumeMounts.mountPath1.path}}
       volumes:
       - name: {{.Values.app.volumeMounts.mountPath1.name}}
