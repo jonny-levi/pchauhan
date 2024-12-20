@@ -99,6 +99,10 @@ worker:
     port: 9000
     targetPort: 9000
     type: ClusterIP
+  env:
+    QUEUE_TIMEOUT: "60"
+    QUEUE_TRIES: "3"
+    QUEUES: "default"
 
 mysql:
   deployment: larvel-mysql-deployment

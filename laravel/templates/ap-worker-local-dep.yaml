@@ -23,14 +23,21 @@ spec:
       containers:
         - name: {{ .Values.worker.name }}
           image: {{ .Values.worker.image }}
-          command:
-          - sh
-          - -c
-          - |
-            cd {{ .Values.worker.volumeMounts.mountPath1.path }}
-            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
-            composer dump-autoload --optimize
-            chmod 777 /var/www/storage/ -R
+          env:
+          - name: QUEUE_TIMEOUT
+            value: "{{ .Values.worker.env.QUEUE_TIMEOUT }}"
+          - name: QUEUE_TRIES
+            value: "{{ .Values.worker.env.QUEUE_TRIES }}"
+          - name: QUEUES
+            value: "{{ .Values.worker.env.QUEUES }}"
+          # command:
+          # - sh
+          # - -c
+          # - |
+          #   cd {{ .Values.worker.volumeMounts.mountPath1.path }}
+          #   COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+          #   composer dump-autoload --optimize
+          #   chmod 777 /var/www/storage/ -R
           ports:
             - containerPort: {{ .Values.worker.service.port }}
           volumeMounts:
