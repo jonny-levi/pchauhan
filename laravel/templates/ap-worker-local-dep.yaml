@@ -38,6 +38,7 @@ spec:
             composer install --no-dev --optimize-autoloader
             composer dump-autoload --optimize
             chmod 777 /var/www/storage/ -R
+            php artisan queue:work redis --queue=${QUEUES} --timeout=${QUEUE_TIMEOUT} --tries=${QUEUE_TRIES} 
           ports:
             - containerPort: {{ .Values.worker.service.port }}
           volumeMounts:
