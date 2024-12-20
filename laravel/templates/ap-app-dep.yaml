@@ -23,16 +23,17 @@ spec:
           name: {{.Values.app.volumeMounts.mountPath1.name }}
         - mountPath: {{ .Values.app.volumeMounts.mountPath2.path }}
           name: {{.Values.app.volumeMounts.mountPath2.name}}
-      - name: file-copier
-        image: busybox
-        command: ["/bin/sh", "-c"]
-        args:
+        initContainers:
+        - name: git-clone
+          image: alpine/git
+          command:
+          - sh
+          - -c
           - |
-            cp -r ../../* {{ .Values.app.volumeMounts.mountPath1.path }};
-            sleep 3600; # Keeps the container alive
-        volumeMounts:
-        - name: {{.Values.app.volumeMounts.mountPath1.name}}
-          mountPath: {{ .Values.app.volumeMounts.mountPath1.path }}
+            https://github.com/jonny-levi/pchauhan.git /var/www
+          volumeMounts:
+          - name: app-files
+            mountPath: {{.Values.app.volumeMounts.mountPath1.path}}
       volumes:
       - name: {{.Values.app.volumeMounts.mountPath1.name}}
         persistentVolumeClaim:
